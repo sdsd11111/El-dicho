@@ -24,6 +24,30 @@
       "dest": "/$1"
     },
     {
+      "src": "^/pan-dulce-tradicional$",
+      "dest": "/pan-dulce-tradicional.html"
+    },
+    {
+      "src": "^/pasteleria-fina$",
+      "dest": "/pasteleria-fina.html"
+    },
+    {
+      "src": "^/bebidas-acompanamientos$",
+      "dest": "/bebidas-acompanamientos.html"
+    },
+    {
+      "src": "^/especiales-temporada$",
+      "dest": "/especiales-temporada.html"
+    },
+    {
+      "src": "^/sobre-nosotros$",
+      "dest": "/sobre-nosotros.html"
+    },
+    {
+      "src": "^/panes-artesanales$",
+      "dest": "/panes-artesanales.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }

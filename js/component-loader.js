@@ -13,12 +13,23 @@ async function loadComponent(componentPath, targetElementId) {
   }
 
   try {
-    // Asegurarse de que la ruta sea absoluta
-    const path = componentPath.startsWith('/') ? componentPath : `/${componentPath}`;
+    // Asegurarse de que la ruta sea absoluta y manejar correctamente las rutas en producción
+    let path;
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      // En desarrollo, usar la ruta relativa al sitio
+      path = componentPath.startsWith('/') ? componentPath : `/${componentPath}`;
+    } else {
+      // En producción, asegurarse de que la ruta sea absoluta desde la raíz
+      path = componentPath.startsWith('/') ? componentPath : `/${componentPath}`;
+      // Asegurarse de que no haya dobles barras en la URL
+      path = path.replace(/([^:]\/)\/+/g, '$1');
+    }
+    
+    console.log(`Cargando componente: ${path}`);
     const response = await fetch(path);
     
     if (!response.ok) {
-      throw new Error(`No se pudo cargar el componente: ${componentPath} (${response.status} ${response.statusText})`);
+      throw new Error(`No se pudo cargar el componente: ${path} (${response.status} ${response.statusText})`);
     }
     
     const html = await response.text();

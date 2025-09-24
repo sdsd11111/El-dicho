@@ -169,7 +169,6 @@ async function buildProductSwipers() {
         console.log(`Buscando imágenes para la categoría: ${folder}`);
         const maxImages = 5;
         const loadedImages = [];
-        // Mapeo de categorías a nombres de carpetas y prefijos
         const categoryMapping = {
             'panes': { folder: 'panes artesanales', prefix: 'panes artesanales ' },
             'pasteles': { folder: 'Pasteleria fina', prefix: 'pasteleria fina ' }, // Actualizado para que coincida con los nombres de archivo

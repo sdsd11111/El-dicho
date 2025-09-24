@@ -1,7 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <base href="/" />
+    <base href="/" id="base-href" />
+    <script>
+      // Asegurarse de que la etiqueta base tenga la URL correcta en producción
+      document.addEventListener('DOMContentLoaded', function() {
+        const base = document.getElementById('base-href');
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+          // En producción, asegurarse de que la URL base sea absoluta
+          const baseUrl = window.location.protocol + '//' + window.location.host + '/';
+          if (base.getAttribute('href') !== baseUrl) {
+            base.setAttribute('href', baseUrl);
+            console.log('URL base actualizada a:', baseUrl);
+          }
+        }
+      });
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Dicho - Panadería Artesanal con Tradición</title>

@@ -163,11 +163,50 @@
 
     <footer class="footer" id="footer-container"></footer>
 
-    <script src="/js/component-loader.js"></script>
     <script>
+        // Función para cargar componentes
+        async function loadComponent(componentPath, targetElementId) {
+            const targetElement = document.getElementById(targetElementId);
+            if (!targetElement) {
+                console.error(`Elemento con ID '${targetElementId}' no encontrado`);
+                return;
+            }
+
+            try {
+                const path = componentPath.startsWith('/') ? componentPath : `/${componentPath}`;
+                const response = await fetch(path);
+                
+                if (!response.ok) {
+                    throw new Error(`Error al cargar el componente: ${componentPath}`);
+                }
+                
+                const html = await response.text();
+                targetElement.innerHTML = html;
+                
+                // Ejecutar scripts dentro del componente
+                const scripts = targetElement.getElementsByTagName('script');
+                for (const script of scripts) {
+                    if (script.src) {
+                        const newScript = document.createElement('script');
+                        newScript.src = script.src.startsWith('http') ? script.src : `/${script.src}`;
+                        document.body.appendChild(newScript);
+                    } else {
+                        try {
+                            new Function(script.text)();
+                        } catch (e) {
+                            console.error('Error ejecutando script:', e);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error(`Error cargando el componente '${componentPath}':`, error);
+            }
+        }
+
+        // Inicialización de la página
         document.addEventListener("DOMContentLoaded", async () => {
             try {
-                // Cargar componentes principales
+                // Cargar componentes
                 await Promise.all([
                     loadComponent('components/header.html', 'header-container'),
                     loadComponent('components/footer.html', 'footer-container')

@@ -2,62 +2,101 @@
 
 Sitio web estático para El Dicho Panadería, construido con HTML, CSS y JavaScript. El sitio es completamente responsivo y utiliza componentes dinámicos para facilitar el mantenimiento.
 
-## Estructura del Proyecto
+## 🚀 Características
 
-- **/components**: Componentes HTML reutilizables (header, footer, formularios, etc.)
-- **/css**: Hojas de estilo del sitio
-- **/data**: Archivos JSON con el contenido de los productos
-- **/images**: Imágenes del sitio organizadas por categorías
-- **/js**: Scripts de JavaScript
-  - `component-loader.js`: Carga componentes HTML dinámicamente
-  - `content-renderer.js`: Renderiza contenido desde archivos JSON
-  - `script.js`: Lógica principal del sitio
+- **Diseño Responsivo**: Se adapta a dispositivos móviles, tablets y escritorios
+- **Carga Dinámica**: Componentes HTML cargados mediante JavaScript
+- **Rendimiento Optimizado**: Carga rápida gracias a la optimización de recursos
+- **Fácil Mantenimiento**: Estructura modular que facilita las actualizaciones
 
-## Despliegue en Vercel
+## 🏗️ Estructura del Proyecto
 
-Este proyecto está configurado para desplegarse fácilmente en Vercel. Sigue estos pasos:
+```
+el-dicho-panaderia/
+├── components/           # Componentes HTML reutilizables
+│   ├── header.html
+│   ├── footer.html
+│   ├── formulario_contacto.html
+│   └── testimonios.html
+├── css/                 # Hojas de estilo
+│   ├── styles.css
+│   └── producto.css
+├── data/                # Datos de productos en formato JSON
+│   ├── panes-artesanales.json
+│   └── ...
+├── images/              # Recursos multimedia
+│   ├── productos/
+│   └── iconos/
+├── js/                  # Scripts JavaScript
+│   ├── content-renderer.js
+│   └── script.js
+├── index.html           # Página principal
+└── vercel.json          # Configuración de Vercel
+```
+
+## 🚀 Despliegue en Vercel
+
+### Requisitos Previos
+- Cuenta en [Vercel](https://vercel.com/)
+- Repositorio Git (GitHub, GitLab o Bitbucket)
+
+### Pasos para el Despliegue
 
 1. **Preparación**
    - Asegúrate de que todos los archivos estén en el repositorio
-   - Verifica que las rutas en tu código sean relativas
+   - Verifica que las rutas en el código sean correctas
 
-2. **Despliegue manual**
-   - Ve a [Vercel](https://vercel.com/) e inicia sesión
-   - Haz clic en "New Project"
-   - Conecta tu repositorio de GitHub/GitLab/Bitbucket
-   - Vercel detectará automáticamente la configuración
-   - Haz clic en "Deploy"
+2. **Despliegue Automático**
+   1. Conecta tu repositorio a Vercel
+   2. Vercel detectará automáticamente la configuración
+   3. Haz clic en "Deploy"
 
-3. **Configuración (opcional)**
-   - **Variables de entorno**: Si usas APIs, configúralas en Settings > Environment Variables
-   - **Dominio personalizado**: Configura tu dominio en Settings > Domains
+3. **Configuración Avanzada**
+   - **Variables de entorno**: Configura en `Settings > Environment Variables`
+   - **Dominio personalizado**: Configura en `Settings > Domains`
+   - **Redirecciones**: Configura en `vercel.json`
 
-4. **Despliegue automático**
-   - Con cada push a tu repositorio, Vercel desplegará automáticamente los cambios
+## 💻 Desarrollo Local
 
-## Ejecución Local
+### Opción 1: Con Python (Recomendado para pruebas rápidas)
+```bash
+# Python 3
+python -m http.server 8000
 
-Para desarrollo local:
+# Abre en tu navegador
+http://localhost:8000
+```
 
-1. **Con Python** (más simple):
-   ```bash
-   python -m http.server 8000
-   ```
-   Abre `http://localhost:8000` en tu navegador.
+### Opción 2: Con Node.js
+```bash
+# Instalar servidor HTTP globalmente
+npm install -g http-server
 
-2. **Con Node.js**:
-   ```bash
-   npx serve
-   ```
-   o instala `http-server` globalmente:
-   ```bash
-   npm install -g http-server
-   http-server
-   ```
+# Iniciar servidor
+http-server -p 8080
 
-## Componentes Dinámicos
+# O con npx (sin instalación)
+npx http-server -p 8080
+```
 
-El sitio utiliza `component-loader.js` para cargar componentes HTML de forma dinámica, lo que facilita el mantenimiento al permitir actualizar un componente una sola vez.
+## 🛠️ Componentes Dinámicos
+
+El sitio utiliza un sistema de carga dinámica de componentes que permite:
+
+- **Reutilización de código**: Componentes como header y footer se cargan una vez
+- **Mantenimiento simplificado**: Actualizaciones en un solo archivo
+- **Carga eficiente**: Los componentes se cargan bajo demanda
+
+## 📝 Notas de Versión
+
+### Última Actualización
+- Corrección de errores en la carga de componentes
+- Mejoras en el rendimiento de la galería de imágenes
+- Optimización para SEO
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT.
 
 ## Configuración de Formularios
 

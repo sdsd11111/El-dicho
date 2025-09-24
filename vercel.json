@@ -44,14 +44,16 @@
       "dest": "/components/$1"
     },
     {
-      "src": "^/[^/]+\\.(js|css|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot|json)$",
-      "dest": "/$0"
+      "src": "^/js/(.*)",
+      "dest": "/js/$1"
+    },
+    {
+      "src": "^/(.*\\.(js|css|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot|json))$",
+      "dest": "/$1"
     },
     {
       "src": "^/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "outputDirectory": ".",
-  "cleanUrls": true
+  ]
 }

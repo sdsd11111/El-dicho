@@ -81,32 +81,29 @@
         async function loadComponent(componentPath, targetElementId) {
             const targetElement = document.getElementById(targetElementId);
             if (!targetElement) {
-                console.error(`Error: Elemento con ID '${targetElementId}' no encontrado.`);
+                console.error(`Elemento con ID '${targetElementId}' no encontrado`);
                 return;
             }
 
             try {
-                // Asegurarse de que la ruta sea absoluta
                 const path = componentPath.startsWith('/') ? componentPath : `/${componentPath}`;
                 const response = await fetch(path);
                 
                 if (!response.ok) {
-                    throw new Error(`No se pudo cargar el componente: ${componentPath} (${response.status} ${response.statusText})`);
+                    throw new Error(`Error al cargar el componente: ${componentPath}`);
                 }
                 
                 const html = await response.text();
                 targetElement.innerHTML = html;
                 
-                // Ejecutar cualquier script dentro del componente
+                // Ejecutar scripts dentro del componente
                 const scripts = targetElement.getElementsByTagName('script');
-                for (let script of scripts) {
+                for (const script of scripts) {
                     if (script.src) {
-                        // Si el script tiene un src, cargarlo dinámicamente
                         const newScript = document.createElement('script');
                         newScript.src = script.src.startsWith('http') ? script.src : `/${script.src}`;
                         document.body.appendChild(newScript);
                     } else {
-                        // Si el script está en línea, ejecutarlo
                         try {
                             new Function(script.text)();
                         } catch (e) {
@@ -115,14 +112,14 @@
                     }
                 }
             } catch (error) {
-                console.error(`Error al cargar el componente '${componentPath}':`, error);
+                console.error(`Error cargando el componente '${componentPath}':`, error);
             }
         }
 
-        // Función para inicializar la página
-        async function initializePage() {
+        // Inicialización de la página
+        document.addEventListener("DOMContentLoaded", async () => {
             try {
-                // Cargar content-renderer.js primero
+                // Cargar content-renderer.js
                 const rendererScript = document.createElement('script');
                 rendererScript.src = '/js/content-renderer.js';
                 await new Promise((resolve) => {
@@ -130,7 +127,7 @@
                     document.body.appendChild(rendererScript);
                 });
 
-                // Cargar todos los componentes HTML reutilizables desde la carpeta components/
+                // Cargar componentes
                 await Promise.all([
                     loadComponent('components/header.html', 'header-container'),
                     loadComponent('components/footer.html', 'footer-container'),
@@ -138,32 +135,28 @@
                     loadComponent('components/formulario_contacto.html', 'contacto-container')
                 ]);
 
-                // Esperar a que se cargue el contenido dinámico
-                await new Promise(resolve => setTimeout(resolve, 100));
-
-                // Renderizar el contenido específico de la página
+                // Renderizar contenido específico de la página
                 if (typeof renderPageContent === 'function') {
                     await renderPageContent();
-                } else {
-                    console.error('La función renderPageContent no está definida');
                 }
 
-                // Lógica para la galería de la página de producto
-                const mainImage = document.querySelector('.main-image') || document.getElementById('main-product-image');
+                // Inicializar galería
+                const mainImage = document.querySelector('.main-image, #main-product-image');
                 const thumbnailsContainer = document.querySelector('.thumbnail-images');
                 
                 if (mainImage && thumbnailsContainer) {
-                    thumbnailsContainer.addEventListener('click', function(e) {
+                    thumbnailsContainer.addEventListener('click', (e) => {
                         if (e.target.tagName === 'IMG') {
                             mainImage.src = e.target.src;
-                            // Actualizar la clase activa
-                            thumbnailsContainer.querySelectorAll('img').forEach(t => t.classList.remove('active'));
+                            thumbnailsContainer.querySelectorAll('img').forEach(t => 
+                                t.classList.remove('active')
+                            );
                             e.target.classList.add('active');
                         }
                     });
                 }
 
-                // Cargar el script principal que maneja la interactividad general
+                // Cargar script principal
                 const mainScript = document.createElement('script');
                 mainScript.src = '/js/script.js';
                 document.body.appendChild(mainScript);
@@ -171,14 +164,7 @@
             } catch (error) {
                 console.error('Error al cargar la página:', error);
             }
-        }
-
-        // Iniciar la carga cuando el DOM esté listo
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializePage);
-        } else {
-            initializePage();
-        }
+        });
     </script>
 
 </body>

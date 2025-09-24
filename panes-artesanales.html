@@ -76,57 +76,58 @@
     <footer class="footer" id="footer-container"></footer>
 
     <!-- Scripts -->
-        <!-- Scripts -->
-    <script src="/js/component-loader.js"></script>
-    <script src="/js/content-renderer.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", async () => {
+        // Función para cargar componentes
+        async function loadComponent(componentPath, targetElementId) {
+            const targetElement = document.getElementById(targetElementId);
+            if (!targetElement) {
+                console.error(`Elemento con ID '${targetElementId}' no encontrado`);
+                return;
+            }
+
             try {
-                // Cargar todos los componentes HTML reutilizables
-                await Promise.all([
-                    loadComponent('components/header.html', 'header-container'),
-                    loadComponent('components/footer.html', 'footer-container'),
-                    loadComponent('components/testimonios.html', 'testimonios-container'),
-                    loadComponent('components/formulario_contacto.html', 'contacto-container')
-                ]);
-
-                // Una vez cargados los componentes, renderizar el contenido específico de la página
-                if (typeof renderPageContent === 'function') {
-                    await renderPageContent();
-                } else {
-                    console.error('La función renderPageContent no está definida');
-                }
-
-                // Cargar el script principal que maneja la interactividad general
-                const mainScript = document.createElement('script');
-                mainScript.src = '/js/script.js';
-                document.body.appendChild(mainScript);
-
-                // Lógica para la galería de la página de producto
-                const mainImage = document.getElementById('main-product-image');
-                const thumbnailsContainer = document.querySelector('.thumbnail-images');
+                const path = componentPath.startsWith('/') ? componentPath : `/${componentPath}`;
+                const response = await fetch(path);
                 
-                if (mainImage && thumbnailsContainer) {
-                    thumbnailsContainer.addEventListener('click', function(e) {
-                        if (e.target.tagName === 'IMG') {
-                            mainImage.src = e.target.src;
-                            // Actualizar la clase activa
-                            thumbnailsContainer.querySelectorAll('img').forEach(t => t.classList.remove('active'));
-                            e.target.classList.add('active');
+                if (!response.ok) {
+                    throw new Error(`Error al cargar el componente: ${componentPath}`);
+                }
+                
+                const html = await response.text();
+                targetElement.innerHTML = html;
+                
+                // Ejecutar scripts dentro del componente
+                const scripts = targetElement.getElementsByTagName('script');
+                for (const script of scripts) {
+                    if (script.src) {
+                        const newScript = document.createElement('script');
+                        newScript.src = script.src.startsWith('http') ? script.src : `/${script.src}`;
+                        document.body.appendChild(newScript);
+                    } else {
+                        try {
+                            new Function(script.text)();
+                        } catch (e) {
+                            console.error('Error ejecutando script:', e);
                         }
-                    });
+                    }
                 }
             } catch (error) {
-                console.error('Error al cargar la página:', error);
+                console.error(`Error cargando el componente '${componentPath}':`, error);
             }
-        });
-    </script>
-    <script src="/js/component-loader.js"></script>
-    <script src="/js/content-renderer.js"></script>
-    <script>
+        }
+
+        // Inicialización de la página
         document.addEventListener("DOMContentLoaded", async () => {
             try {
-                // Cargar todos los componentes HTML reutilizables
+                // Cargar content-renderer.js
+                const rendererScript = document.createElement('script');
+                rendererScript.src = '/js/content-renderer.js';
+                await new Promise((resolve) => {
+                    rendererScript.onload = resolve;
+                    document.body.appendChild(rendererScript);
+                });
+
+                // Cargar componentes
                 await Promise.all([
                     loadComponent('components/header.html', 'header-container'),
                     loadComponent('components/footer.html', 'footer-container'),
@@ -134,32 +135,32 @@
                     loadComponent('components/formulario_contacto.html', 'contacto-container')
                 ]);
 
-                // Una vez cargados los componentes, renderizar el contenido específico de la página
+                // Renderizar contenido específico de la página
                 if (typeof renderPageContent === 'function') {
                     await renderPageContent();
-                } else {
-                    console.error('La función renderPageContent no está definida');
                 }
 
-                // Cargar el script principal que maneja la interactividad general
-                const mainScript = document.createElement('script');
-                mainScript.src = '/js/script.js';
-                document.body.appendChild(mainScript);
-
-                // Lógica para la galería de la página de producto
-                const mainImage = document.getElementById('main-product-image');
+                // Inicializar galería
+                const mainImage = document.querySelector('.main-image, #main-product-image');
                 const thumbnailsContainer = document.querySelector('.thumbnail-images');
                 
                 if (mainImage && thumbnailsContainer) {
-                    thumbnailsContainer.addEventListener('click', function(e) {
+                    thumbnailsContainer.addEventListener('click', (e) => {
                         if (e.target.tagName === 'IMG') {
                             mainImage.src = e.target.src;
-                            // Actualizar la clase activa
-                            thumbnailsContainer.querySelectorAll('img').forEach(t => t.classList.remove('active'));
+                            thumbnailsContainer.querySelectorAll('img').forEach(t => 
+                                t.classList.remove('active')
+                            );
                             e.target.classList.add('active');
                         }
                     });
                 }
+
+                // Cargar script principal
+                const mainScript = document.createElement('script');
+                mainScript.src = '/js/script.js';
+                document.body.appendChild(mainScript);
+
             } catch (error) {
                 console.error('Error al cargar la página:', error);
             }

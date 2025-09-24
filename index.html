@@ -354,11 +354,11 @@
         document.addEventListener("DOMContentLoaded", () => {
             // Cargar componentes principales
             Promise.all([
-                loadComponent('/components/header.html', 'header-container'),
-                loadComponent('/components/footer.html', 'footer-container'),
-                loadComponent('/components/testimonios.html', 'testimonios-container'),
-                loadComponent('/components/formulario_contacto.html', 'contacto-container'),
-                loadComponent('/components/contact-widget.html', 'contact-widget-container')
+                loadComponent('components/header.html', 'header-container'),
+                loadComponent('components/footer.html', 'footer-container'),
+                loadComponent('components/testimonios.html', 'testimonios-container'),
+                loadComponent('components/formulario_contacto.html', 'contacto-container'),
+                loadComponent('components/contact-widget.html', 'contact-widget-container')
             ]).then(() => {
                 console.log('Todos los componentes se cargaron correctamente');
                 

@@ -348,22 +348,36 @@
 
     <div id="contact-widget-container"></div>
     <!-- Scripts -->
-    <script src="js/component-loader.js"></script>
+    <script src="/js/component-loader.js"></script>
     <script>
         // Cargar componentes y luego ejecutar el script principal
         document.addEventListener("DOMContentLoaded", () => {
+            // Cargar componentes principales
             Promise.all([
-                loadComponent('header.html', 'header-container'),
-                loadComponent('footer.html', 'footer-container'),
-                loadComponent('testimonios.html', 'testimonios-container'),
-                loadComponent('formulario_contacto.html', 'contacto-container'),
-                loadComponent('contact-widget.html', 'contact-widget-container')
+                loadComponent('/components/header.html', 'header-container'),
+                loadComponent('/components/footer.html', 'footer-container'),
+                loadComponent('/components/testimonios.html', 'testimonios-container'),
+                loadComponent('/components/formulario_contacto.html', 'contacto-container'),
+                loadComponent('/components/contact-widget.html', 'contact-widget-container')
             ]).then(() => {
-                // Forzar la reinicialización de los scripts del header si es necesario
-                // Esto es crucial para que la interactividad del header funcione.
+                console.log('Todos los componentes se cargaron correctamente');
+                
+                // Cargar el script principal después de que los componentes estén listos
                 const mainScript = document.createElement('script');
-                mainScript.src = 'js/script.js';
+                mainScript.src = '/js/script.js';
+                mainScript.onload = function() {
+                    console.log('Script principal cargado correctamente');
+                    // Inicializar cualquier función necesaria después de cargar el script
+                    if (window.initializeApp) {
+                        window.initializeApp();
+                    }
+                };
+                mainScript.onerror = function() {
+                    console.error('Error al cargar el script principal');
+                };
                 document.body.appendChild(mainScript);
+            }).catch(error => {
+                console.error('Error al cargar componentes:', error);
             });
         });
     </script>

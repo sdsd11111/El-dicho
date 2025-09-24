@@ -128,6 +128,8 @@ categoryTabs.forEach(tab => {
 // ===== SLIDERS DE CATEGORÍAS =====
 // ===== SLIDERS DE CATEGORÍAS (dinámicos por carpeta) =====
 async function buildProductSwipers() {
+    // Asegurarse de que las rutas base sean absolutas
+    const basePath = window.location.pathname.split('/').slice(0, -1).join('/');
     const swipers = document.querySelectorAll('.product-swiper');
     const glightInstances = [];
 

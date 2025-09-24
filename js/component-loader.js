@@ -13,7 +13,8 @@ async function loadComponent(componentName, targetElementId) {
   }
 
   try {
-    const response = await fetch(`components/${componentName}`);
+    // Usar ruta absoluta para cargar los componentes
+    const response = await fetch(`/components/${componentName}`);
     if (!response.ok) {
       throw new Error(`No se pudo cargar el componente: ${componentName}`);
     }

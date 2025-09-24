@@ -124,7 +124,7 @@
     <header class="header" id="header-container"></header>
 
     <main>
-        <section class="fullscreen-hero" style="background-image: url('images/panaderia-interior.jpg');">
+        <section class="fullscreen-hero" style="background-image: url('/images/Nosotros/hero.jpg');">
             <div class="container">
                 <h1>El Dicho Panadería — Tradición y Sabor desde 1985</h1>
                 <p>Por más de tres décadas hemos endulzado los momentos especiales de las familias con nuestros panes y postres artesanales, elaborados con ingredientes de la más alta calidad y recetas tradicionales transmitidas de generación en generación.</p>
@@ -155,7 +155,7 @@
                 <h2>Conoce Nuestro Proceso Artesanal</h2>
                 <p style="text-align: center; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">Descubre cómo elaboramos nuestros productos con técnicas tradicionales y los mejores ingredientes. Cada pieza es hecha a mano con dedicación y cuidado para ofrecerte la mejor calidad en cada bocado.</p>
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="El proceso artesanal de El Dicho Panadería" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/oCPElo_QJx4" title="El proceso artesanal de El Dicho Panadería" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
         </section>
@@ -163,14 +163,23 @@
 
     <footer class="footer" id="footer-container"></footer>
 
-    <script src="js/component-loader.js"></script>
+    <script src="/js/component-loader.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
-            await loadComponent('header.html', 'header-container');
-            await loadComponent('footer.html', 'footer-container');
-            const mainScript = document.createElement('script');
-            mainScript.src = 'js/script.js';
-            document.body.appendChild(mainScript);
+            try {
+                // Cargar componentes principales
+                await Promise.all([
+                    loadComponent('components/header.html', 'header-container'),
+                    loadComponent('components/footer.html', 'footer-container')
+                ]);
+                
+                // Cargar script principal
+                const mainScript = document.createElement('script');
+                mainScript.src = '/js/script.js';
+                document.body.appendChild(mainScript);
+            } catch (error) {
+                console.error('Error al cargar componentes:', error);
+            }
         });
     </script>
 </body>

@@ -76,38 +76,57 @@
     <footer class="footer" id="footer-container"></footer>
 
     <!-- Scripts -->
-    <script src="js/component-loader.js"></script>
-    <script src="js/content-renderer.js"></script>
+        <!-- Scripts -->
+    <script src="/js/component-loader.js"></script>
+    <script src="/js/content-renderer.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-            // Cargar todos los componentes HTML reutilizables
-            await Promise.all([
-                loadComponent('header.html', 'header-container'),
-                loadComponent('footer.html', 'footer-container'),
-                loadComponent('testimonios.html', 'testimonios-container'),
-                loadComponent('formulario_contacto.html', 'contacto-container')
-            ]);
+        async function initializePage() {
+            try {
+                // Cargar todos los componentes HTML reutilizables
+                await Promise.all([
+                    loadComponent('components/header.html', 'header-container'),
+                    loadComponent('components/footer.html', 'footer-container'),
+                    loadComponent('components/testimonios.html', 'testimonios-container'),
+                    loadComponent('components/formulario_contacto.html', 'contacto-container')
+                ]);
 
-            // Una vez cargados los componentes, renderizar el contenido específico de la página
-            await renderPageContent();
-
-            // Cargar el script principal que maneja la interactividad general (menú, sliders, etc.)
-            const mainScript = document.createElement('script');
-            mainScript.src = 'js/script.js';
-            document.body.appendChild(mainScript);
-
-            // Lógica para la galería de la página de producto (se debe re-adjuntar después del render)
-            const mainImage = document.getElementById('main-product-image');
-            const thumbnailsContainer = document.querySelector('.thumbnail-images');
-            thumbnailsContainer.addEventListener('click', function(e) {
-                if (e.target.tagName === 'IMG') {
-                    mainImage.src = e.target.src;
-                    // Actualizar la clase activa
-                    thumbnailsContainer.querySelectorAll('img').forEach(t => t.classList.remove('active'));
-                    e.target.classList.add('active');
+                // Una vez cargados los componentes, renderizar el contenido específico de la página
+                if (typeof renderPageContent === 'function') {
+                    await renderPageContent();
+                } else {
+                    console.error('La función renderPageContent no está definida');
                 }
-            });
-        });
+
+                // Lógica para la galería de la página de producto
+                const mainImage = document.querySelector('.main-image') || document.getElementById('main-product-image');
+                const thumbnailsContainer = document.querySelector('.thumbnail-images');
+                
+                if (mainImage && thumbnailsContainer) {
+                    thumbnailsContainer.addEventListener('click', function(e) {
+                        if (e.target.tagName === 'IMG') {
+                            mainImage.src = e.target.src;
+                            // Actualizar la clase activa
+                            thumbnailsContainer.querySelectorAll('img').forEach(t => t.classList.remove('active'));
+                            e.target.classList.add('active');
+                        }
+                    });
+                }
+
+                // Cargar el script principal que maneja la interactividad general
+                const mainScript = document.createElement('script');
+                mainScript.src = 'js/script.js';
+                document.body.appendChild(mainScript);
+            } catch (error) {
+                console.error('Error al cargar la página:', error);
+            }
+        }
+
+        // Inicializar la página cuando el DOM esté completamente cargado
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
     </script>
 
 </body>
